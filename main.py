@@ -80,3 +80,78 @@ except TimeoutException:
     print (no," is last page or server issue from website")
 
 
+# Importing necessary modules]
+
+from audioop import add
+import time
+
+import csv
+from typing import List
+from unicodedata import category
+import pandas as pd
+from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
+import time
+
+import csv
+from selenium.webdriver.chrome.options import Options
+
+# WebDriver Chrome
+options = Options()
+options.add_experimental_option('excludeSwitches', ['enable-logging'])
+driver = webdriver.Chrome(executable_path=r"chromedriver.exe",chrome_options=options)
+
+with open('UT_URLS.csv', newline='') as f:
+    reader = csv.reader(f)
+    data = list(reader)
+
+
+url_value = 300
+#1-500
+result = []
+
+#Create empty csv file
+binary_file_name = open("name1-300.txt", "wb")
+binary_file_address = open("address1-300.txt", "wb")
+binary_file_category = open("category1-300.txt", "wb")
+binary_status = open("status1-300.txt", "wb")
+
+for i in range (url_value,450):
+
+    new_lst=(','.join(data[url_value]))
+    res = str(new_lst)
+
+
+    try:
+        driver.get(res)    
+        name = (driver.find_element(By.XPATH,'//*[@id="entity_content"]/div[2]').text)
+        name = (name+"\n")
+
+        address = (driver.find_element(By.XPATH,'//*[@id="entity_content"]/div[10]/div[1]').text)
+        address = (address+'\n')
+
+        Category = (driver.find_element(By.XPATH,'//*[@id="entity_content"]/div[10]/div[2]').text)
+        Category = (Category+'\n')
+
+        Status = (driver.find_element(By.XPATH,'//*[@id="entity_content"]/div[10]/div[3]').text)
+        Status = (Status+'\n')
+        print(url_value)
+
+        binary_file_name.write(name.encode())
+        binary_file_address.write(address.encode())
+        binary_file_category.write(Category.encode())
+        binary_status.write(Status.encode())
+       
+        # binary_file.write(name.encode())
+        # binary_file.write(raw_data.encode())
+    except:
+        pass
+
+    url_value = url_value +1
+
+binary_file_name.close()
+binary_file_address.close()
+binary_file_category.close()
+binary_status.close()
+time.sleep(1)
